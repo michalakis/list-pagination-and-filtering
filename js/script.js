@@ -3,9 +3,6 @@ Treehouse Techdegree:
 FSJS project 2 - List Filter and Pagination
 ******************************************/
 
-// Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
-
-
 /***
    Add your global variables that store the DOM elements you will
    need to reference and/or manipulate.
@@ -23,18 +20,8 @@ const itemsPerPage = 10;
 
 
 /***
-   Create the `showPage` function to hide all of the items in the
+   The `showPage` function hides all of the items in the
    list except for the ten you want to show.
-
-   Pro Tips:
-     - Keep in mind that with a list of 54 students, the last page
-       will only display four.
-     - Remember that the first student has an index of 0.
-     - Remember that a function `parameter` goes in the parens when
-       you initially define the function, and it acts as a variable
-       or a placeholder to represent the actual function `argument`
-       that will be passed into the parens later when you call or
-       "invoke" the function
 ***/
 
 const showPage =  ( items, itemsPerPage, page ) => {
@@ -54,7 +41,7 @@ const showPage =  ( items, itemsPerPage, page ) => {
 
 
 /***
-   Create the `appendPageLinks function` to generate, append, and add
+   The `appendPageLinks function` generates, appends, and adds
    functionality to the pagination buttons.
 ***/
 
@@ -80,9 +67,8 @@ const appendPageLinks = ( items, itemsPerPage ) => {
   studentList.insertAdjacentElement('afterend', div);
 
   // Get the first pagination link  and  make it active.
-  const link = div.querySelector('a');
-
-  link.className = "active";
+  const firstLink = div.querySelector('a');
+  firstLink.className = "active";
 
   // Add event handler to pagination elements.
   div.addEventListener ('click', event => {
@@ -103,6 +89,6 @@ const appendPageLinks = ( items, itemsPerPage ) => {
   });
 };
 
-//  Call the above functions in order to initialize the page.
+//  In the above functions in order to initialize the page.
 appendPageLinks( studentItems, itemsPerPage );
 showPage( studentItems, itemsPerPage, 1 );
