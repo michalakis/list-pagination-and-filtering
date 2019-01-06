@@ -76,6 +76,12 @@ const appendPageLinks = () => {
 
   studentList.insertAdjacentElement('afterend', div);
 
+  div.addEventListener ('click', e => {
+    if ( event.target.tagName.toLowerCase() === 'a' ) {
+      const page = event.target.textContent;
+      showPage( studentItems, page );
+    }
+  });
 }
 
 appendPageLinks();
