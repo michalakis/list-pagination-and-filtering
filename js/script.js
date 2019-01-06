@@ -1,21 +1,12 @@
 /******************************************
-Treehouse Techdegree:
-FSJS project 2 - List Filter and Pagination
+List Filter and Pagination
 ******************************************/
 
 /***
-   Add your global variables that store the DOM elements you will
-   need to reference and/or manipulate.
-
-   But be mindful of which variables should be global and which
-   should be locally scoped to one of the two main functions you're
-   going to create. A good general rule of thumb is if the variable
-   will only be used inside of a function, then it can be locally
-   scoped to that function.
+   Global variables are declared here
 ***/
 
 const studentList = document.querySelector('.student-list');
-const studentItems = document.querySelectorAll('.student-item');
 const itemsPerPage = 10;
 
 
@@ -24,17 +15,19 @@ const itemsPerPage = 10;
    list except for the ten you want to show.
 ***/
 
-const showPage =  ( items, itemsPerPage, page ) => {
+const showPage =  ( list, itemsPerPage, page ) => {
+  // Get items from list.
+  const listItems = list.querySelectorAll("li");
   // Calculates the first index and last index of students to be shown.
   const firstItemIndex =  page * itemsPerPage - itemsPerPage;
   const lastItemIndex = page * itemsPerPage - 1;
 
   // Loops over all students and only displays relevant ones.
-  for ( let i = 0; i < items.length; i++ ) {
+  for ( let i = 0; i < listItems.length; i++ ) {
     if ( i >= firstItemIndex && i <= lastItemIndex ){
-      items[i].style.display = "inherit";
+      listItems[i].style.display = "inherit";
     } else {
-      items[i].style.display = "none"
+      listItems[i].style.display = "none"
     }
   }
 };
@@ -45,26 +38,30 @@ const showPage =  ( items, itemsPerPage, page ) => {
    functionality to the pagination buttons.
 ***/
 
-const appendPageLinks = ( items, itemsPerPage ) => {
+const appendPageLinks = ( list, itemsPerPage ) => {
+  // Get items from list.
+  const listItems =  list.querySelectorAll("li");
   // Calculate number of pages needed.
-  const pageNumber = Math.ceil( studentItems.length / itemsPerPage );
+  const pageNumber = Math.ceil( listItems.length / itemsPerPage );
   // Create the elements to be appended to the page, then append them.
   const div = document.createElement('div');
   const ul = document.createElement('ul');
 
-  ul.className = 'pagination';
+  div.className = 'pagination';
 
   for ( let i = 1; i <= pageNumber; i++ ) {
     const li = document.createElement('li');
     const a = document.createElement('a');
 
+    a.href = "#"
+    a.textContent = i;
+
     li.appendChild(a);
     ul.appendChild(li);
-    a.textContent = i;
   }
 
   div.appendChild(ul);
-  studentList.insertAdjacentElement('afterend', div);
+  list.insertAdjacentElement('afterend', div);
 
   // Get the first pagination link  and  make it active.
   const firstLink = div.querySelector('a');
@@ -75,7 +72,7 @@ const appendPageLinks = ( items, itemsPerPage ) => {
     if ( event.target.tagName.toLowerCase() === 'a' ) {
       const page = event.target.textContent;
       // Invoke showPage method
-      showPage( studentItems, itemsPerPage, page );
+      showPage( list, itemsPerPage, page );
       // Apply relevant class to each element.
       const paginationLinks = div.querySelectorAll('a');
       for ( let i = 0; i < paginationLinks.length; i++ ) {
@@ -90,5 +87,5 @@ const appendPageLinks = ( items, itemsPerPage ) => {
 };
 
 //  In the above functions in order to initialize the page.
-appendPageLinks( studentItems, itemsPerPage );
-showPage( studentItems, itemsPerPage, 1 );
+appendPageLinks( studentList, itemsPerPage );
+showPage( studentList, itemsPerPage, 1 );
