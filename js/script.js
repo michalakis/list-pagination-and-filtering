@@ -17,7 +17,7 @@ const itemsPerPage = 10;
 
 const showPage =  ( list, itemsPerPage, page ) => {
   // Get items from list.
-  const listItems = list.querySelectorAll("li");
+  const listItems = list.querySelectorAll('li');
   // Calculates the first index and last index of students to be shown.
   const firstItemIndex =  page * itemsPerPage - itemsPerPage;
   const lastItemIndex = page * itemsPerPage - 1;
@@ -25,9 +25,9 @@ const showPage =  ( list, itemsPerPage, page ) => {
   // Loops over all students and only displays relevant ones.
   for ( let i = 0; i < listItems.length; i++ ) {
     if ( i >= firstItemIndex && i <= lastItemIndex ){
-      listItems[i].style.display = "inherit";
+      listItems[i].style.display = 'inherit';
     } else {
-      listItems[i].style.display = "none"
+      listItems[i].style.display = 'none'
     }
   }
 };
@@ -40,7 +40,7 @@ const showPage =  ( list, itemsPerPage, page ) => {
 
 const appendPageLinks = ( list, itemsPerPage ) => {
   // Get items from list.
-  const listItems =  list.querySelectorAll("li");
+  const listItems =  list.querySelectorAll('li');
   // Calculate number of pages needed.
   const pageNumber = Math.ceil( listItems.length / itemsPerPage );
   // Create the elements to be appended to the page, then append them.
@@ -61,11 +61,12 @@ const appendPageLinks = ( list, itemsPerPage ) => {
   }
 
   div.appendChild(ul);
-  list.insertAdjacentElement('afterend', div);
+  const listParent = list.parentNode;
+  listParent.appendChild(div);
 
   // Get the first pagination link  and  make it active.
   const firstLink = div.querySelector('a');
-  firstLink.className = "active";
+  firstLink.className = 'active';
 
   // Add event handler to pagination elements.
   div.addEventListener ('click', event => {
@@ -77,15 +78,59 @@ const appendPageLinks = ( list, itemsPerPage ) => {
       const paginationLinks = div.querySelectorAll('a');
       for ( let i = 0; i < paginationLinks.length; i++ ) {
         if ( paginationLinks[i] !== event.target && paginationLinks[i].className === "active" ) {
-            paginationLinks[i].classList.remove("active");
+            paginationLinks[i].classList.remove('active');
         } else if ( paginationLinks[i] === event.target ) {
-          paginationLinks[i].className = "active";
+          paginationLinks[i].className = 'active';
         }
       }
     }
   });
 };
 
-//  In the above functions in order to initialize the page.
-appendPageLinks( studentList, itemsPerPage );
+/***
+   The search function allows the user to search through the list,
+   and returnn any items that match the provided string.
+***/
+
+const search = ( list, itemsPerPage ) => {
+  // Create html elements and append to page.
+  const div = document.createElement('div');
+  div.className = 'student-search';
+  const input = document.createElement('input');
+  input.placeholder = 'Search for students..';
+  div.appendChild(input);
+  const button = document.createElement('button');
+  button.textContent = 'Search';
+  div.appendChild(button);
+  const listPreviousSibling = list.previousElementSibling;
+  listPreviousSibling.appendChild(div);
+
+  // Add functionality to search button
+  const listItems = list.querySelectorAll('li');
+  const searchDiv = document.querySelector('.student-search');
+  searchDiv.addEventListener( 'click', event => {
+    console.log('hello');
+    if ( event.target.tagName.toLowerCase() == 'button' ) {
+      console.log('jesus');
+      const userInput = searchDiv.querySelector('input').value;
+      console.log(userInput);
+      // const searchResults = [];
+      // for ( let i = 0; i < listItems.length; i++ ) {
+      //   const textContent = listItems[i].textContent;
+      //   if ( textContent.includes(userInput) ) {
+      //     searchResults.push(listItems[i]);
+      //   }
+      // }
+      // const listParent = list.parentNode;
+      // listParent.removeChild(list);
+      // showPage( searchResults, itemsPerPage, 1 );
+      // appendPageLinks( searchResults, itemsPerPage );
+    }
+  });
+}
+
+
+//  Invoke the above functions in order to initialize the page.
 showPage( studentList, itemsPerPage, 1 );
+appendPageLinks( studentList, itemsPerPage );
+search( studentList, itemsPerPage );
