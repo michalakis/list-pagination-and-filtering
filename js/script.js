@@ -48,7 +48,7 @@ const showPage =  ( items, page ) => {
       items[i].style.display = "none"
     }
   }
-}
+};
 
 
 /***
@@ -76,13 +76,22 @@ const appendPageLinks = () => {
 
   studentList.insertAdjacentElement('afterend', div);
 
-  div.addEventListener ('click', e => {
+  const link = div.querySelector('a');
+
+  link.className = "active";
+
+  div.addEventListener ('click', event => {
     if ( event.target.tagName.toLowerCase() === 'a' ) {
       const page = event.target.textContent;
       showPage( studentItems, page );
+      const paginationLinks = div.querySelectorAll('a');
+      for ( let i = 0; i < paginationLinks.length; i++ ) {
+        paginationLinks[i].className = "";
+      }
+      event.target.className = "active";
     }
   });
-}
+};
 
 appendPageLinks();
 showPage( studentItems, 1 );
