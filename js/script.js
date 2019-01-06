@@ -18,6 +18,8 @@ FSJS project 2 - List Filter and Pagination
 ***/
 
 const studentList = document.querySelector('.student-list');
+const studentItems = document.querySelectorAll('.student-item');
+const itemsPerPage = 10;
 
 
 /***
@@ -35,7 +37,18 @@ const studentList = document.querySelector('.student-list');
        "invoke" the function
 ***/
 
+const showPage =  ( items, page ) => {
+  const firstItemIndex =  page * itemsPerPage - itemsPerPage;
+  const lastItemIndex = page * itemsPerPage - 1;
 
+  for ( let i = 0; i < items.length; i++ ) {
+    if ( i >= firstItemIndex && i <= lastItemIndex ){
+      items[i].style.display = "inherit";
+    } else {
+      items[i].style.display = "none"
+    }
+  }
+}
 
 
 /***
@@ -44,24 +57,19 @@ const studentList = document.querySelector('.student-list');
 ***/
 
 const appendPageLinks = () => {
-
-  const studentItems = document.querySelectorAll('.student-item');
-  const itemsPerPage = 10;
   const pageNumber = Math.ceil( studentItems.length / itemsPerPage );
-  let div = document.createElement('div');
-  let ul = document.createElement('ul');
+  const div = document.createElement('div');
+  const ul = document.createElement('ul');
 
   ul.className = 'pagination';
 
   for ( let i = 1; i <= pageNumber; i++ ) {
-
-    let li = document.createElement('li');
-    let a = document.createElement('a');
+    const li = document.createElement('li');
+    const a = document.createElement('a');
 
     li.appendChild(a);
     ul.appendChild(li);
     a.textContent = i;
-
   }
 
   div.appendChild(ul);
@@ -71,6 +79,7 @@ const appendPageLinks = () => {
 }
 
 appendPageLinks();
+showPage( studentItems, 1 );
 
 
 // Remember to delete the comments that came with this file, and replace them with your own code comments.
