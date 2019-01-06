@@ -37,10 +37,12 @@ const itemsPerPage = 10;
        "invoke" the function
 ***/
 
-const showPage =  ( items, page ) => {
+const showPage =  ( items, itemsPerPage, page ) => {
+  // Calculates the first index and last index of students to be shown.
   const firstItemIndex =  page * itemsPerPage - itemsPerPage;
   const lastItemIndex = page * itemsPerPage - 1;
 
+  // Loops over all students and only displays relevant ones.
   for ( let i = 0; i < items.length; i++ ) {
     if ( i >= firstItemIndex && i <= lastItemIndex ){
       items[i].style.display = "inherit";
@@ -56,8 +58,10 @@ const showPage =  ( items, page ) => {
    functionality to the pagination buttons.
 ***/
 
-const appendPageLinks = () => {
+const appendPageLinks = ( items, itemsPerPage ) => {
+  // Calculate number of pages needed.
   const pageNumber = Math.ceil( studentItems.length / itemsPerPage );
+  // Create the elements to be appended to the page, then append them.
   const div = document.createElement('div');
   const ul = document.createElement('ul');
 
@@ -73,28 +77,32 @@ const appendPageLinks = () => {
   }
 
   div.appendChild(ul);
-
   studentList.insertAdjacentElement('afterend', div);
 
+  // Get the first pagination link  and  make it active.
   const link = div.querySelector('a');
 
   link.className = "active";
 
+  // Add event handler to pagination elements.
   div.addEventListener ('click', event => {
     if ( event.target.tagName.toLowerCase() === 'a' ) {
       const page = event.target.textContent;
-      showPage( studentItems, page );
+      // Invoke showPage method
+      showPage( studentItems, itemsPerPage, page );
+      // Apply relevant class to each element.
       const paginationLinks = div.querySelectorAll('a');
       for ( let i = 0; i < paginationLinks.length; i++ ) {
-        paginationLinks[i].className = "";
+        if ( paginationLinks[i] !== event.target && paginationLinks[i].className === "active" ) {
+            paginationLinks[i].classList.remove("active");
+        } else if ( paginationLinks[i] === event.target ) {
+          paginationLinks[i].className = "active";
+        }
       }
-      event.target.className = "active";
     }
   });
 };
 
-appendPageLinks();
-showPage( studentItems, 1 );
-
-
-// Remember to delete the comments that came with this file, and replace them with your own code comments.
+//  Call the above functions in order to initialize the page.
+appendPageLinks( studentItems, itemsPerPage );
+showPage( studentItems, itemsPerPage, 1 );
