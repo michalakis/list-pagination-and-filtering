@@ -24,7 +24,7 @@ const showPage =  ( list, itemsPerPage, page ) => {
 
   // Loops over all students and only displays relevant ones.
   for ( let i = 0; i < listItems.length; i++ ) {
-    if ( i >= firstItemIndex && i <= lastItemIndex ){
+    if ( i >= firstItemIndex && i <= lastItemIndex ) {
       listItems[i].style.display = 'inherit';
     } else {
       listItems[i].style.display = 'none'
@@ -105,26 +105,36 @@ const search = ( list, itemsPerPage ) => {
   const listPreviousSibling = list.previousElementSibling;
   listPreviousSibling.appendChild(div);
 
-  // Add functionality to search button
+  // Add functionality to search button.
   const listItems = list.querySelectorAll('li');
   const searchDiv = document.querySelector('.student-search');
+  // Add event listener to search button.
   searchDiv.addEventListener( 'click', event => {
-    console.log('hello');
     if ( event.target.tagName.toLowerCase() == 'button' ) {
-      console.log('jesus');
       const userInput = searchDiv.querySelector('input').value;
-      console.log(userInput);
-      // const searchResults = [];
-      // for ( let i = 0; i < listItems.length; i++ ) {
-      //   const textContent = listItems[i].textContent;
-      //   if ( textContent.includes(userInput) ) {
-      //     searchResults.push(listItems[i]);
-      //   }
-      // }
-      // const listParent = list.parentNode;
-      // listParent.removeChild(list);
-      // showPage( searchResults, itemsPerPage, 1 );
-      // appendPageLinks( searchResults, itemsPerPage );
+      // Create a new element and fill it with list items that contain the search query.
+      const searchResults = document.createElement('ul');
+      searchResults.className = "student-list";
+      for ( let i = 0; i < listItems.length; i++ ) {
+        const textContent = listItems[i].textContent;
+        if ( textContent.includes(userInput) ) {
+          searchResults.appendChild( listItems[i] );
+        }
+      }
+      // Remove current list, pagination and search funtion, and rebuild them.
+      const listParent = list.parentNode;
+      listParent.removeChild(list);
+      const pagination = document.querySelector('.pagination');
+      const paginationParent = pagination.parentNode;
+      paginationParent.removeChild(pagination);
+      const search = document.querySelector('.student-search');
+      const searchParent = search.parentNode;
+      searchParent.removeChild(search);
+      listParent.appendChild(searchResults);
+      const newStudentList = document.querySelector('.student-list');
+      showPage( newStudentList, itemsPerPage, 1 );
+      appendPageLinks( newStudentList, itemsPerPage );
+      //search( newStudentList, itemsPerPage );
     }
   });
 }
