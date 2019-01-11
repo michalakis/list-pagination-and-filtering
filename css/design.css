@@ -4,7 +4,7 @@ body{
   color: #222;
 }
 
-.noInput {
+.noInput, .noMatch {
   display: inline-block;
   background-color: #d73a4a;
   color: #fff;
@@ -13,6 +13,10 @@ body{
   padding: 10px;
   margin: 10px 0;
   text-align: center;
+}
+
+.noMatch {
+  background-color: #0366d6
 }
 
 .page{

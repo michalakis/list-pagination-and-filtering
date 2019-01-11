@@ -18,7 +18,7 @@ const itemsPerPage = 10;
 const showPage =  ( list, itemsPerPage, page ) => {
   // Get items from list.
   const listItems = list.querySelectorAll('li');
-  // Calculates the first index and last index of students to be shown.
+  // Calculate the first index and last index of students to be shown.
   const firstItemIndex =  page * itemsPerPage - itemsPerPage;
   const lastItemIndex = page * itemsPerPage - 1;
 
@@ -34,7 +34,7 @@ const showPage =  ( list, itemsPerPage, page ) => {
 
 
 /***
-   The `appendPageLinks function` generates, appends, and adds
+   The `appendPageLinks` function generates, appends, and adds
    functionality to the pagination buttons.
 ***/
 
@@ -108,12 +108,13 @@ const search = ( list, itemsPerPage ) => {
   // Add functionality to search button.
   const listItems = list.querySelectorAll('li');
   const searchDiv = document.querySelector('.student-search');
-  // Add event listener to search button.
   searchDiv.addEventListener( 'click', event => {
+    //1
     if ( event.target.tagName.toLowerCase() == 'button' ) {
       const userInput = searchDiv.querySelector('input').value;
-      if ( userInput == "" ) {
-        // If search input is empty, give a warning.
+      // If search input is empty, give a warning.
+      //2
+      if ( userInput.length < 1 ) {
         const warningExists = document.querySelector('.noInput');
         if ( warningExists === null ) {
           const noInput = document.createElement('p');
@@ -132,36 +133,46 @@ const search = ( list, itemsPerPage ) => {
         // Create a new element and fill it with list items that contain the search query.
         const searchResults = document.createElement('ul');
         searchResults.className = "student-list";
+        let matchedItemsCounter = 0;
         for ( let i = 0; i < listItems.length; i++ ) {
           const textContent = listItems[i].textContent;
           if ( textContent.includes(userInput) ) {
             searchResults.appendChild( listItems[i] );
+            matchedItemsCounter++;
           }
+          // If there are search results
+          //3
+          if ( matchedItemsCounter > 0 ) {
+            // Remove current list, pagination and search funtion, and rebuild them using search results.
+            const listParent = list.parentNode;
+            listParent.removeChild(list);
+            const pagination = document.querySelector('.pagination');
+            const paginationParent = pagination.parentNode;
+            paginationParent.removeChild(pagination);
+            const searchElements = document.querySelector('.student-search');
+            const searchParent = searchElements.parentNode;
+            searchParent.removeChild(searchElements);
+            listParent.appendChild(searchResults);
+            const newStudentList = document.querySelector('.student-list');
+            showPage( newStudentList, itemsPerPage, 1 );
+            appendPageLinks( newStudentList, itemsPerPage );
+            search( newStudentList, itemsPerPage );
+          } else {
+            // Let the user know there are no results matching the query.
+            const noMatch = document.querySelector('.noMatch');
+            if ( noMatch === null ) {
+              const noMatch = document.createElement('p');
+              noMatch.className = 'noMatch';
+              noMatch.textContent = `There are no matches,
+                                    please try again!`;
+              div.parentNode.appendChild(noMatch);
+            }
+          }//3
         }
-        // If there are search results
-        if ( searchResults !== null) {
-          // Remove current list, pagination and search funtion, and rebuild them using search results.
-          const listParent = list.parentNode;
-          listParent.removeChild(list);
-          const pagination = document.querySelector('.pagination');
-          const paginationParent = pagination.parentNode;
-          paginationParent.removeChild(pagination);
-          const searchElements = document.querySelector('.student-search');
-          const searchParent = searchElements.parentNode;
-          searchParent.removeChild(searchElements);
-          listParent.appendChild(searchResults);
-          const newStudentList = document.querySelector('.student-list');
-          showPage( newStudentList, itemsPerPage, 1 );
-          appendPageLinks( newStudentList, itemsPerPage );
-          search( newStudentList, itemsPerPage );
-        } else {
-          // Let the user know there are results matching the query.
-
-        }
-      }
-    }
-  });
-}
+      }//2
+    }//1
+  }); // End event listener
+}; // End search function
 
 
 //  Invoke the above functions in order to initialize the page.
