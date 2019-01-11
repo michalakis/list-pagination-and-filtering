@@ -4,6 +4,17 @@ body{
   color: #222;
 }
 
+.noInput {
+  display: inline-block;
+  background-color: #d73a4a;
+  color: #fff;
+  border-radius: 5px;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  text-align: center;
+}
+
 .page{
   margin: 50px auto;
   width: 70%;

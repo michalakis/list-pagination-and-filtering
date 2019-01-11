@@ -112,29 +112,53 @@ const search = ( list, itemsPerPage ) => {
   searchDiv.addEventListener( 'click', event => {
     if ( event.target.tagName.toLowerCase() == 'button' ) {
       const userInput = searchDiv.querySelector('input').value;
-      // Create a new element and fill it with list items that contain the search query.
-      const searchResults = document.createElement('ul');
-      searchResults.className = "student-list";
-      for ( let i = 0; i < listItems.length; i++ ) {
-        const textContent = listItems[i].textContent;
-        if ( textContent.includes(userInput) ) {
-          searchResults.appendChild( listItems[i] );
+      if ( userInput == "" ) {
+        // If search input is empty, give a warning.
+        const warningExists = document.querySelector('.noInput');
+        if ( warningExists === null ) {
+          const noInput = document.createElement('p');
+          noInput.className = 'noInput'
+          noInput.textContent = `The search field is empty,
+                          please provide a search term!`;
+          div.parentNode.appendChild(noInput);
+        }
+      } else {
+        // Remove warning, if it exists.
+        const warningExists = document.querySelector('.noInput');
+        if ( warningExists !== null ) {
+          const parentNode = warningExists.parentNode;
+          parentNode.removeChild(warningExists);
+        }
+        // Create a new element and fill it with list items that contain the search query.
+        const searchResults = document.createElement('ul');
+        searchResults.className = "student-list";
+        for ( let i = 0; i < listItems.length; i++ ) {
+          const textContent = listItems[i].textContent;
+          if ( textContent.includes(userInput) ) {
+            searchResults.appendChild( listItems[i] );
+          }
+        }
+        // If there are search results
+        if ( searchResults !== null) {
+          // Remove current list, pagination and search funtion, and rebuild them using search results.
+          const listParent = list.parentNode;
+          listParent.removeChild(list);
+          const pagination = document.querySelector('.pagination');
+          const paginationParent = pagination.parentNode;
+          paginationParent.removeChild(pagination);
+          const searchElements = document.querySelector('.student-search');
+          const searchParent = searchElements.parentNode;
+          searchParent.removeChild(searchElements);
+          listParent.appendChild(searchResults);
+          const newStudentList = document.querySelector('.student-list');
+          showPage( newStudentList, itemsPerPage, 1 );
+          appendPageLinks( newStudentList, itemsPerPage );
+          search( newStudentList, itemsPerPage );
+        } else {
+          // Let the user know there are results matching the query.
+
         }
       }
-      // Remove current list, pagination and search funtion, and rebuild them.
-      const listParent = list.parentNode;
-      listParent.removeChild(list);
-      const pagination = document.querySelector('.pagination');
-      const paginationParent = pagination.parentNode;
-      paginationParent.removeChild(pagination);
-      const search = document.querySelector('.student-search');
-      const searchParent = search.parentNode;
-      searchParent.removeChild(search);
-      listParent.appendChild(searchResults);
-      const newStudentList = document.querySelector('.student-list');
-      showPage( newStudentList, itemsPerPage, 1 );
-      appendPageLinks( newStudentList, itemsPerPage );
-      //search( newStudentList, itemsPerPage );
     }
   });
 }
