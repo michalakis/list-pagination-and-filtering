@@ -142,19 +142,16 @@ const search = ( list, itemsPerPage ) => {
           // If there are search results
           if ( matchedItemsCounter > 0 ) {
             // Remove current list, pagination and search funtion, and rebuild them using search results.
-            const listParent = list.parentNode;
-            listParent.removeChild(list);
+            const currentList = document.querySelector('.student-list');
+            const currentListParent = currentList.parentNode;
+            currentListParent.removeChild(currentList);
             const pagination = document.querySelector('.pagination');
             const paginationParent = pagination.parentNode;
             paginationParent.removeChild(pagination);
-            const searchElements = document.querySelector('.student-search');
-            const searchParent = searchElements.parentNode;
-            searchParent.removeChild(searchElements);
-            listParent.appendChild(searchResults);
+            currentListParent.appendChild(searchResults);
             const newStudentList = document.querySelector('.student-list');
             showPage( newStudentList, itemsPerPage, 1 );
             appendPageLinks( newStudentList, itemsPerPage );
-            search( newStudentList, itemsPerPage );
           } else {
             // Let the user know there are no results matching the query.
             const noMatch = document.querySelector('.noMatch');
