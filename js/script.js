@@ -109,11 +109,9 @@ const search = ( list, itemsPerPage ) => {
   const listItems = list.querySelectorAll('li');
   const searchDiv = document.querySelector('.student-search');
   searchDiv.addEventListener( 'click', event => {
-    //1
     if ( event.target.tagName.toLowerCase() == 'button' ) {
       const userInput = searchDiv.querySelector('input').value;
       // If search input is empty, give a warning.
-      //2
       if ( userInput.length < 1 ) {
         const warningExists = document.querySelector('.noInput');
         if ( warningExists === null ) {
@@ -140,8 +138,8 @@ const search = ( list, itemsPerPage ) => {
             searchResults.appendChild( listItems[i] );
             matchedItemsCounter++;
           }
+        }
           // If there are search results
-          //3
           if ( matchedItemsCounter > 0 ) {
             // Remove current list, pagination and search funtion, and rebuild them using search results.
             const listParent = list.parentNode;
@@ -167,12 +165,11 @@ const search = ( list, itemsPerPage ) => {
                                     please try again!`;
               div.parentNode.appendChild(noMatch);
             }
-          }//3
-        }
-      }//2
-    }//1
-  }); // End event listener
-}; // End search function
+         }
+      }
+    }
+  });
+};
 
 
 //  Invoke the above functions in order to initialize the page.
